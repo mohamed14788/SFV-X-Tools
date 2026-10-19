@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>SFV-X Tools — أدوات ويب فورية للمطورين والمصممين وصناع المحتوى</title>
+  <meta name="description" content="SFV-X Tools — مجموعة أدوات ويب فورية بدون تسجيل: JSON formatter, Base64, Regex tester, Color contrast checker, Lorem generator، وغيرها. سريع، آمن، ويدعم الوضع الليلي." />
+  <meta name="keywords" content="tools, dev tools, designer tools, json formatter, base64, regex tester, color contrast, lorem ipsum, web tools, no signup" />
+  <link rel="canonical" href="https://sfv-x.example.com/" />
+  <meta name="author" content="SFV-X" />
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="SFV-X Tools — أدوات ويب فورية">
+  <meta property="og:description" content="مجموعة أدوات ويب فورية بدون تسجيل: JSON, Base64, Regex, Color contrast, Lorem وغيرها.">
+  <meta property="og:url" content="https://sfv-x.example.com/">
+  <meta property="og:site_name" content="SFV-X Tools">
+  <meta property="og:image" content="https://sfv-x.example.com/og-image.png">
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SFV-X Tools — أدوات ويب فورية">
+  <meta name="twitter:description" content="مجموعة أدوات ويب فورية بدون تسجيل.">
+  <meta name="twitter:image" content="https://sfv-x.example.com/og-image.png">
+
+  <!-- Hreflang for global SEO (example: ar, en, es) -->
+  <link rel="alternate" href="https://sfv-x.example.com/ar" hreflang="ar" />
+  <link rel="alternate" href="https://sfv-x.example.com/en" hreflang="en" />
+  <link rel="alternate" href="https://sfv-x.example.com/es" hreflang="es" />
+
+  <!-- Tailwind Play CDN (fast prototyping; for production we recommend building) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    // Tailwind configuration: enable dark mode class strategy
+    tailwind.config = { darkMode: 'class', theme: { extend: { colors: { sfvx: { 50:'#f8fbfc',100:'#eef8fb',300:'#9fd3ff',500:'#1fb6ff',700:'#0a84ff' } } } } }
+  </script>
+
+  <!-- Preconnects & fonts -->
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root { --bg:#0f1724; --card:#0b1220; --muted:#9aa4b2; }
+    html,body { font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+    /* RTL friendly small tweaks */
+    [dir="rtl"] .icon { transform: scaleX(-1); }
+    /* Accessibility focus */
+    :focus { outline: 3px solid rgba(59,130,246,0.35); outline-offset: 2px; border-radius: 6px; }
+    /* Nice monospace for code areas */
+    pre, code, textarea { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Roboto Mono", "Courier New", monospace; font-size: 0.95rem; }
+    /* Small helper for error text */
+    .error { color: #ff6b6b; }
+  </style>
+
+  <!-- Structured Data (JSON-LD) -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "name": "SFV-X",
+        "url": "https://sfv-x.example.com/",
+        "logo": "https://sfv-x.example.com/logo.png",
+        "sameAs": ["https://twitter.com/sfvx","https://github.com/sfvx"]
+      },
+      {
+        "@type": "WebSite",
+        "name": "SFV-X Tools",
+        "url": "https://sfv-x.example.com/",
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": "https://sfv-x.example.com/?s={search_term_string}",
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "WebPage",
+        "name": "SFV-X Tools — مجموعة أدوات ويب فورية",
+        "description": "مجموعة أدوات ويب فورية بدون تسجيل.",
+        "url": "https://sfv-x.example.com/"
+      }
+    ]
+  }
+  </script>
+
+  <meta name="theme-color" content="#0b1220" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-title" content="SFV-X Tools" />
+  <meta name="format-detection" content="telephone=no,email=no,address=no">
+</head>
+<body class="bg-white text-slate-900 dark:bg-slate-900 dark:text-slate-100 transition-colors duration-200">
+  <header class="max-w-6xl mx-auto p-6 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-sfvx-500 to-sfvx-700 flex items-center justify-center text-white font-bold">SFV-X</div>
+      <div>
+        <h1 class="text-xl font-extrabold">SFV-X Tools</h1>
+        <p class="text-sm text-slate-500 dark:text-slate-400">أدوات ويب فورية — بدون تسجيل، بدون إعلانات</p>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <button id="themeToggle" aria-label="تبديل الوضع" class="p-2 rounded-md bg-slate-100 dark:bg-slate-800">
+        <svg id="themeIcon" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M12 3v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M12 19v2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M4.2 4.2l1.4 1.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M18.4 18.4l1.4 1.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M1 12h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M21 12h2" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M4.2 19.8l1.4-1.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><path d="M18.4 5.6l1.4-1.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <a class="px-3 py-2 rounded-md bg-sfvx-500 text-white text-sm font-semibold" href="#get-started">ابدأ الآن</a>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto p-6">
+    <!-- Search -->
+    <section class="mb-6">
+      <div class="bg-gradient-to-r from-slate-50 to-white dark:from-slate-800 dark:to-slate-900 rounded-xl p-6 shadow-sm">
+        <div class="flex flex-col md:flex-row md:items-center gap-4">
+          <div class="flex-1">
+            <label for="siteSearch" class="sr-only">ابحث عن أداة</label>
+            <input id="siteSearch" type="search" placeholder="ابحث عن أداة (مثال: json, base64, regex)" class="w-full p-3 rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-950" />
+            <p id="searchHint" class="mt-2 text-sm text-slate-500 dark:text-slate-400">سريع — اكتب للعثور على الأداة فوراً.</p>
+          </div>
+          <div class="w-full md:w-80 flex gap-2">
+            <button id="popularBtn" class="w-1/2 px-3 py-2 rounded-md border bg-white dark:bg-slate-800">الأكثر استخداماً</button>
+            <button id="allBtn" class="w-1/2 px-3 py-2 rounded-md border bg-white dark:bg-slate-800">كل الأدوات</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8" id="toolsGrid" aria-live="polite">
+      <!-- Tool cards injected by JS -->
+    </section>
+
+    <section id="toolArea" class="bg-white dark:bg-slate-900 rounded-xl p-6 shadow-sm">
+      <!-- Active tool view -->
+      <div id="toolContent">
+        <h2 class="text-lg font-bold">مرحباً بك في SFV-X — اختر أداة من الأعلى لتبدأ</h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">جميع الأدوات تعمل مباشرة في المتصفح بدون تسجيل.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="max-w-6xl mx-auto p-6 text-sm text-slate-500 dark:text-slate-400">
+    <div class="flex flex-col md:flex-row md:justify-between gap-4">
+      <div>© 2026 SFV-X. جميع الحقوق محفوظة.</div>
+      <div class="flex gap-3">
+        <a href="#" class="hover:underline">سياسة الخصوصية</a>
+        <a href="#" class="hover:underline">مساعدة</a>
+        <a href="#" class="hover:underline">GitHub</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Main JS: tools, search, UI -->
+  <script>
+  // -------------------------
+  // Tool definitions (metadata)
+  // -------------------------
+  const TOOLS = [
+    { id: 'json', title: 'JSON Formatter / Validator', desc: 'تنسيق JSON، كشف الأخطاء، وتصغير/تكبير.', tags:['json','format','validator','formatter'], popular:true },
+    { id: 'base64', title: 'Base64 Encoder / Decoder', desc: 'ترميز وفك ترميز Base64 بسرعة.', tags:['base64','encode','decode'], popular:true },
+    { id: 'lorem', title: 'Lorem Ipsum Generator', desc: 'توليد نصوص Lorem قابلة للتخصيص للاختبارات.', tags:['lorem','generator','dummy text'], popular:false },
+    { id: 'regex', title: 'Regex Tester', desc: 'اختبر تعابيرك النمطية وشاهد المجموعات (groups).', tags:['regex','tester','pattern'], popular:true },
+    { id: 'contrast', title: 'Color Contrast Checker', desc: 'تحقق من نسبة التباين وفق WCAG بين لونين.', tags:['color','contrast','accessibility'], popular:false },
+    { id: 'time', title: 'Timestamp / Unix Converter', desc: 'تحويل بين التاريخ البشري وUnix timestamp.', tags:['timestamp','unix','time'], popular:false }
+  ];
+
+  // -------------------------
+  // Utility helpers
+  // -------------------------
+  const el = (s) => document.querySelector(s);
+  const create = (t, attrs={}) => { const e = document.createElement(t); Object.assign(e, attrs); return e; };
+  function copyToClipboard(text){ navigator.clipboard?.writeText(text).then(()=>flash('تم نسخ النتيجة')); }
+  function flash(msg){
+    const n = create('div',{innerText:msg});
+    Object.assign(n.style,{position:'fixed',bottom:'20px',left:'50%',transform:'translateX(-50%)',background:'#0b1220',color:'#fff',padding:'10px 16px',borderRadius:'8px',zIndex:9999});
+    document.body.appendChild(n);
+    setTimeout(()=>n.remove(),2000);
+  }
+
+  // -------------------------
+  // Render tool cards
+  // -------------------------
+  const toolsGrid = el('#toolsGrid');
+  function renderCards(list){
+    toolsGrid.innerHTML = '';
+    list.forEach(t=>{
+      const card = create('button',{className:'text-right p-4 rounded-lg border hover:shadow-sm bg-white dark:bg-slate-800 w-full text-slate-800 dark:text-slate-100', innerHTML:
+        `<div class="flex items-start justify-between gap-4">
+          <div>
+            <h3 class="font-semibold text-sm">${t.title}</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">${t.desc}</p>
+            <div class="mt-2 text-xs text-slate-400">${t.tags.join(' • ')}</div>
+          </div>
+          <div class="text-sfvx-500 text-2xl font-bold">${t.title.split(' ')[0].slice(0,2)}</div>
+        </div>`});
+      card.addEventListener('click',()=>openTool(t.id));
+      toolsGrid.appendChild(card);
+    });
+  }
+  renderCards(TOOLS);
+
+  // -------------------------
+  // Search
+  // -------------------------
+  const searchInput = el('#siteSearch');
+  searchInput.addEventListener('input', onSearch);
+  function onSearch(){
+    const q = searchInput.value.trim().toLowerCase();
+    if(!q){ renderCards(TOOLS); return; }
+    const filtered = TOOLS.filter(t=>{
+      return t.title.toLowerCase().includes(q) || t.desc.toLowerCase().includes(q) || t.tags.join(' ').toLowerCase().includes(q);
+    });
+    renderCards(filtered);
+  }
+
+  // Popular / All buttons
+  el('#popularBtn').addEventListener('click', ()=> renderCards(TOOLS.filter(t=>t.popular)));
+  el('#allBtn').addEventListener('click', ()=> renderCards(TOOLS));
+
+  // -------------------------
+  // Tool rendering area
+  // -------------------------
+  const toolContent = el('#toolContent');
+  function openTool(id){
+    history.replaceState({},'', '#'+id);
+    const t = TOOLS.find(x=>x.id===id);
+    if(!t) return;
+    // Render based on id
+    let html = `<div class="flex items-start justify-between mb-4"><div><h2 class="text-xl font-bold">${t.title}</h2><p class="text-sm text-slate-500 dark:text-slate-400 mt-1">${t.desc}</p></div><div class="flex gap-2"><button onclick="copyUrl()" class="px-3 py-1 rounded-md border">مشاركة</button><button onclick="scrollToTop()" class="px-3 py-1 rounded-md border">أعلى</button></div></div>`;
+    if(id==='json'){
+      html += `
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="text-sm font-medium">المدخل (Raw JSON)</label>
+            <textarea id="jsonInput" rows="12" class="w-full p-3 mt-2 rounded-md bg-slate-50 dark:bg-slate-800"></textarea>
+            <div class="flex gap-2 mt-3">
+              <button onclick="formatJson()" class="px-3 py-2 rounded-md bg-sfvx-500 text-white">تنسيق</button>
+              <button onclick="minifyJson()" class="px-3 py-2 rounded-md border">تصغير</button>
+              <button onclick="copyResult()" class="px-3 py-2 rounded-md border">نسخ</button>
+            </div>
+            <p id="jsonError" class="mt-2 text-sm error"></p>
+          </div>
+          <div>
+            <label class="text-sm font-medium">النتيجة</label>
+            <pre id="jsonOutput" class="mt-2 p-3 rounded-md bg-black/90 text-white overflow-auto" style="height:100%"></pre>
+          </div>
+        </div>`;
+    } else if(id==='base64'){
+      html += `
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="text-sm font-medium">النص / البيانات</label>
+            <textarea id="b64Input" rows="10" class="w-full p-3 mt-2 rounded-md bg-slate-50 dark:bg-slate-800"></textarea>
+            <div class="flex gap-2 mt-3">
+              <button onclick="b64Encode()" class="px-3 py-2 rounded-md bg-sfvx-500 text-white">Encode</button>
+              <button onclick="b64Decode()" class="px-3 py-2 rounded-md border">Decode</button>
+              <button onclick="copyB64()" class="px-3 py-2 rounded-md border">نسخ</button>
+            </div>
+            <p id="b64Error" class="mt-2 text-sm error"></p>
+          </div>
+          <div>
+            <label class="text-sm font-medium">النتيجة</label>
+            <pre id="b64Output" class="mt-2 p-3 rounded-md bg-black/90 text-white overflow-auto" style="height:100%"></pre>
+          </div>
+        </div>`;
+    } else if(id==='lorem'){
+      html += `
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="text-sm font-medium">خيارات التوليد</label>
+            <div class="mt-2 flex gap-2">
+              <input id="loremCount" type="number" min="1" value="3" class="w-24 p-2 rounded-md bg-slate-50 dark:bg-slate-800" />
+              <select id="loremUnit" class="p-2 rounded-md bg-slate-50 dark:bg-slate-800">
+                <option value="paragraphs">فقرات</option>
+                <option value="sentences">جمل</option>
+                <option value="words">كلمات</option>
+              </select>
+              <button onclick="genLorem()" class="px-3 py-2 rounded-md bg-sfvx-500 text-white">توليد</button>
+            </div>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">نص اصطناعي مناسب للاختبارات والتصميم.</p>
+          </div>
+          <div>
+            <label class="text-sm font-medium">النتيجة</label>
+            <pre id="loremOutput" class="mt-2 p-3 rounded-md bg-black/90 text-white overflow-auto" style="height:100%"></pre>
+          </div>
+        </div>`;
+    } else if(id==='regex'){
+      html += `
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="text-sm font-medium">التعبير النمطي (Regex)</label>
+            <input id="rePattern" class="w-full p-2 mt-2 rounded-md bg-slate-50 dark:bg-slate-800" placeholder="مثال: (\\w+)@(\\w+).(\\w+)" />
+            <label class="text-sm font-medium mt-3">Flags</label>
+            <input id="reFlags" placeholder="g,i,m..." class="w-full p-2 mt-2 rounded-md bg-slate-50 dark:bg-slate-800" />
+            <label class="text-sm font-medium mt-3">نص الاختبار</label>
+            <textarea id="reText" rows="8" class="w-full p-3 mt-2 rounded-md bg-slate-50 dark:bg-slate-800"></textarea>
+            <div class="flex gap-2 mt-3">
+              <button onclick="testRegex()" class="px-3 py-2 rounded-md bg-sfvx-500 text-white">اختبر</button>
+              <button onclick="copyRegex()" class="px-3 py-2 rounded-md border">نسخ النتائج</button>
+            </div>
+            <p id="reError" class="mt-2 text-sm error"></p>
+          </div>
+          <div>
+            <label class="text-sm font-medium">النتائج</label>
+            <pre id="reOutput" class="mt-2 p-3 rounded-md bg-black/90 text-white overflow-auto" style="height:100%"></pre>
+          </div>
+        </div>`;
+    } else if(id==='contrast'){
+      html += `
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="text-sm font-medium">اختر اللونين</label>
+            <div class="mt-2 flex gap-2 items-center">
+              <input id="c1" type="color" value="#000000" class="w-12 h-12 rounded" />
+              <input id="c1hex" class="p-2 rounded-md bg-slate-50 dark:bg-slate-800" value="#000000" />
+              <span class="mx-2">↔</span>
+              <input id="c2" type="color" value="#ffffff" class="w-12 h-12 rounded" />
+              <input id="c2hex" class="p-2 rounded-md bg-slate-50 dark:bg-slate-800" value="#ffffff" />
+            </div>
+            <div class="mt-3 flex gap-2">
+              <button onclick="checkContrast()" class="px-3 py-2 rounded-md bg-sfvx-500 text-white">تحقق</button>
+              <button onclick="copyContrast()" class="px-3 py-2 rounded-md border">نسخ</button>
+            </div>
+            <p id="cError" class="mt-2 text-sm error"></p>
+          </div>
+          <div>
+            <label class="text-sm font-medium">النتيجة</label>
+            <div id="contrastResult" class="mt-2 p-3 rounded-md bg-black/90 text-white overflow-auto" style="min-height:120px"></div>
+          </div>
+        </div>`;
+    } else if(id==='time'){
+      html += `
+        <div class="grid md:grid-cols-2 gap-4">
+          <div>
+            <label class="text-sm font-medium">التاريخ / الوقت</label>
+            <input id="humanTime" type="datetime-local" class="w-full p-2 mt-2 rounded-md bg-slate-50 dark:bg-slate-800" />
+            <div class="mt-3 flex gap-2">
+              <button onclick="toUnix()" class="px-3 py-2 rounded-md bg-sfvx-500 text-white">إلى Unix</button>
+              <button onclick="fromUnix()" class="px-3 py-2 rounded-md border">من Unix</button>
+            </div>
+            <label class="text-sm font-medium mt-3">Unix Timestamp</label>
+            <input id="unixInput" class="w-full p-2 mt-2 rounded-md bg-slate-50 dark:bg-slate-800" placeholder="مثال: 1672531200" />
+          </div>
+          <div>
+            <label class="text-sm font-medium">النتيجة</label>
+            <pre id="timeOutput" class="mt-2 p-3 rounded-md bg-black/90 text-white overflow-auto" style="height:100%"></pre>
+          </div>
+        </div>`;
+    }
+
+    toolContent.innerHTML = html;
+    // Hook helper functions into window for inline onclick
+    window.copyUrl = ()=>{ navigator.clipboard.writeText(location.href); flash('تم نسخ الرابط'); };
+    window.scrollToTop = ()=> window.scrollTo({top:0,behavior:'smooth'});
+
+    // After rendering, attach small helpers for inputs (e.g., sync color hex)
+    if(id==='contrast'){
+      const c1=el('#c1'), c2=el('#c2'), h1=el('#c1hex'), h2=el('#c2hex');
+      c1.addEventListener('input',()=>h1.value=c1.value);
+      c2.addEventListener('input',()=>h2.value=c2.value);
+      h1.addEventListener('change',()=>c1.value=h1.value);
+      h2.addEventListener('change',()=>c2.value=h2.value);
+    }
+  }
+
+  // Open initial tool if hash present
+  if(location.hash){ openTool(location.hash.replace('#','')); }
+
+  // -------------------------
+  // Tool implementations
+  // -------------------------
+  // JSON
+  function formatJson(){
+    const inp = el('#jsonInput').value;
+    try{
+      const obj = JSON.parse(inp);
+      const pretty = JSON.stringify(obj,null,2);
+      el('#jsonOutput').innerText = pretty;
+      el('#jsonError').innerText = '';
+    }catch(e){
+      el('#jsonError').innerText = 'خطأ في JSON: ' + e.message;
+    }
+  }
+  function minifyJson(){
+    const inp = el('#jsonInput').value;
+    try{
+      const obj = JSON.parse(inp);
+      const min = JSON.stringify(obj);
+      el('#jsonOutput').innerText = min;
+      el('#jsonError').innerText = '';
+    }catch(e){
+      el('#jsonError').innerText = 'خطأ في JSON: ' + e.message;
+    }
+  }
+  function copyResult(){ copyToClipboard(el('#jsonOutput').innerText); }
+
+  // Base64
+  function b64Encode(){
+    try{
+      const text = el('#b64Input').value;
+      const encoded = btoa(unescape(encodeURIComponent(text)));
+      el('#b64Output').innerText = encoded;
+      el('#b64Error').innerText = '';
+    }catch(e){ el('#b64Error').innerText = 'خطأ في الترميز: ' + e.message; }
+  }
+  function b64Decode(){
+    try{
+      const text = el('#b64Input').value.trim();
+      const decoded = decodeURIComponent(escape(atob(text)));
+      el('#b64Output').innerText = decoded;
+      el('#b64Error').innerText = '';
+    }catch(e){ el('#b64Error').innerText = 'خطأ في فك الترميز: ' + e.message; }
+  }
+  function copyB64(){ copyToClipboard(el('#b64Output').innerText); }
+
+  // Lorem
+  const LOREM_SENTENCES = [
+    "لوريم إيبسوم هو ببساطة نص شكلي يستخدم في صناعة الطباعة والتنضيد.",
+    "هذا النص يساعد المصممين والمطورين باختبار التخطيط والتصميم.",
+    "يمكن تخصيص عدد الفقرات أو الجمل حسب الحاجة بسرعة.",
+    "يحقق SFV-X تجربة سريعة وبدون تعقيد لأدوات الويب.",
+    "التصميم مبني ليدعم الوضع الليلي والوصولية."
+  ];
+  function genLorem(){
+    const count = Math.max(1, parseInt(el('#loremCount').value||3));
+    const unit = el('#loremUnit').value;
+    let out='';
+    if(unit==='paragraphs'){
+      for(let i=0;i<count;i++){
+        let p='';
+        for(let j=0;j<4;j++) p += LOREM_SENTENCES[(i+j)%LOREM_SENTENCES.length] + ' ';
+        out += p.trim() + '\\n\\n';
+      }
+    } else if(unit==='sentences'){
+      for(let i=0;i<count;i++) out += LOREM_SENTENCES[i%LOREM_SENTENCES.length] + ' ';
+    } else {
+      // words
+      const words = LOREM_SENTENCES.join(' ').split(' ');
+      for(let i=0;i<count;i++){
+        out += words[i % words.length] + (i<count-1?' ':'');
+      }
+    }
+    el('#loremOutput').innerText = out.trim();
+  }
+
+  // Regex
+  function testRegex(){
+    const pattern = el('#rePattern').value;
+    const flags = el('#reFlags').value;
+    const text = el('#reText').value;
+    try{
+      const re = new RegExp(pattern, flags);
+      // global vs single
+      let matches = [];
+      if(re.global){
+        let m;
+        while((m = re.exec(text)) !== null){
+          matches.push({match: m[0], groups: Array.from(m.slice(1)), index: m.index});
+          if(m.index === re.lastIndex) re.lastIndex++;
+        }
+      } else {
+        const m = re.exec(text);
+        if(m) matches.push({match: m[0], groups: Array.from(m.slice(1)), index: m.index});
+      }
+      el('#reOutput').innerText = JSON.stringify(matches, null, 2);
+      el('#reError').innerText = '';
+    }catch(e){ el('#reError').innerText = 'خطأ في التعبير: ' + e.message; }
+  }
+  function copyRegex(){ copyToClipboard(el('#reOutput').innerText); }
+
+  // Contrast (WCAG)
+  function luminance(r,g,b){
+    const a=[r,g,b].map(v=>{
+      v/=255; return v<=0.03928 ? v/12.92 : Math.pow(((v+0.055)/1.055),2.4);
+    });
+    return 0.2126*a[0]+0.7152*a[1]+0.0722*a[2];
+  }
+  function hexToRgb(hex){
+    hex=hex.replace('#','');
+    if(hex.length===3) hex=hex.split('').map(c=>c+c).join('');
+    const num = parseInt(hex,16);
+    return [(num>>16)&255, (num>>8)&255, num&255];
+  }
+  function contrastRatio(hex1,hex2){
+    const [r1,g1,b1]=hexToRgb(hex1);
+    const [r2,g2,b2]=hexToRgb(hex2);
+    const L1 = luminance(r1,g1,b1);
+    const L2 = luminance(r2,g2,b2);
+    const lighter = Math.max(L1,L2);
+    const darker = Math.min(L1,L2);
+    return (lighter+0.05)/(darker+0.05);
+  }
+  function wcagLevel(ratio){
+    if(ratio>=7) return 'AAA (نص عادي)';
+    if(ratio>=4.5) return 'AA (نص عادي)';
+    if(ratio>=3) return 'AA (نص كبير)';
+    return 'فشل WCAG';
+  }
+  function checkContrast(){
+    try{
+      const a = el('#c1hex').value.trim();
+      const b = el('#c2hex').value.trim();
+      const ratio = Number((contrastRatio(a,b)).toFixed(2));
+      const result = `نسبة التباين: ${ratio} — التقييم: ${wcagLevel(ratio)}`;
+      el('#contrastResult').innerHTML = `<div style="display:flex;gap:10px;align-items:center"><div style="width:64px;height:64px;background:${a};border-radius:6px;border:1px solid #000"></div><div style="width:64px;height:64px;background:${b};border-radius:6px;border:1px solid #000"></div><div style="flex:1">${result}</div></div>`;
+      el('#cError').innerText = '';
+    }catch(e){ el('#cError').innerText = 'خطأ: ' + e.message; }
+  }
+  function copyContrast(){ copyToClipboard(el('#contrastResult').innerText||''); }
+
+  // Time
+  function toUnix(){
+    const dt = el('#humanTime').value;
+    if(!dt){ el('#timeOutput').innerText = 'اختر تاريخاً.'; return; }
+    const ts = Math.floor(new Date(dt).getTime()/1000);
+    el('#timeOutput').innerText = `Unix Timestamp: ${ts}`;
+  }
+  function fromUnix(){
+    const u = parseInt(el('#unixInput').value);
+    if(isNaN(u)){ el('#timeOutput').innerText = 'ادخل Unix Timestamp صالح.'; return; }
+    const d = new Date(u*1000);
+    el('#timeOutput').innerText = `التاريخ: ${d.toISOString().replace('T',' ').replace('Z','')}`;
+  }
+
+  // Expose some functions used inline
+  window.formatJson = formatJson;
+  window.minifyJson = minifyJson;
+  window.copyResult = copyResult;
+  window.b64Encode = b64Encode;
+  window.b64Decode = b64Decode;
+  window.copyB64 = copyB64;
+  window.genLorem = genLorem;
+  window.testRegex = testRegex;
+  window.copyRegex = copyRegex;
+  window.checkContrast = checkContrast;
+  window.copyContrast = copyContrast;
+  window.toUnix = toUnix;
+  window.fromUnix = fromUnix;
+
+  // -------------------------
+  // Theme toggle & persistence
+  // -------------------------
+  const themeToggle = el('#themeToggle');
+  function applyTheme(dark){
+    if(dark) document.documentElement.classList.add('dark'), localStorage.setItem('sfv-theme','dark');
+    else document.documentElement.classList.remove('dark'), localStorage.setItem('sfv-theme','light');
+  }
+  const saved = localStorage.getItem('sfv-theme');
+  if(saved==='dark') applyTheme(true);
+  themeToggle.addEventListener('click',()=>{
+    const isDark = document.documentElement.classList.contains('dark');
+    applyTheme(!isDark);
+  });
+
+  // Accessibility: keyboard navigation for cards
+  toolsGrid.addEventListener('keydown', (e)=>{
+    if(e.key==='Enter' && e.target.matches('button')) e.target.click();
+  });
+
+  </script>
+</body>
+</html>
