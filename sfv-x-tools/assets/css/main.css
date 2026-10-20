@@ -1,0 +1,18 @@
+/* SFV-X V4 - Custom Themes - NOT Google colors */
+:root {
+  --bg-dark: #0a0a0f;
+  --card-dark: #111118;
+  --border-dark: rgba(255,255,255,0.1);
+  --bg-light: #f8f7f4; /* warm beige, not google white */
+  --card-light: #ffffff;
+  --border-light: #e7e5e4;
+  --text-light: #1c1917;
+  --accent: #7c3aed;
+}
+html.dark { background: var(--bg-dark); color: #fff; }
+html.light { background: var(--bg-light); color: var(--text-light); }
+.paid-banner {
+  background: linear-gradient(90deg, #0f172a 0%, #1e293b 100%);
+  border-radius: 24px;
+  border: 1px solid rgba(255,255,255,0.1);
+}
